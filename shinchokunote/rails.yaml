@@ -91,6 +91,12 @@ spec:
           - name: static-files
             mountPath: /var/www/static_files
             readOnly: true
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 80
+          initialDelaySeconds: 20
+          timeoutSeconds: 3
       volumes:
         - name: nginx-conf
           configMap:
