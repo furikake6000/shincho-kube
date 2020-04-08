@@ -40,7 +40,7 @@ spec:
             topologyKey: kubernetes.io/hostname
       containers:
       - name: rails
-        image: furikake6000/shinchokunote:0.1.1
+        image: furikake6000/shinchokunote:0.2.1
         ports:
         - containerPort: 3000
         args: 
