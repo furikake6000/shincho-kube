@@ -22,7 +22,7 @@ spec:
   selector:
     matchLabels:
       app: rails
-  replicas: 1
+  replicas: 2
   template:
     metadata:
       labels:
@@ -40,7 +40,7 @@ spec:
             topologyKey: kubernetes.io/hostname
       containers:
       - name: rails
-        image: furikake6000/shinchokunote:0.1.1
+        image: furikake6000/shinchokunote:0.2.1
         ports:
         - containerPort: 3000
         args: 
@@ -95,6 +95,12 @@ spec:
           - name: static-files
             mountPath: /var/www/static_files
             readOnly: true
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 80
+          initialDelaySeconds: 20
+          timeoutSeconds: 3
       volumes:
         - name: nginx-conf
           configMap:
