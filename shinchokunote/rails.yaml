@@ -88,6 +88,10 @@ spec:
             mountPath: /etc/nginx/nginx.conf
             subPath: nginx.conf  # mount as a file(not directory)
             readOnly: true
+          - name: htpasswd
+            mountPath: /etc/nginx/.htpasswd
+            subPath: .htpasswd  # mount as a file(not directory)
+            readOnly: true
           - name: static-files
             mountPath: /var/www/static_files
             readOnly: true
@@ -98,5 +102,11 @@ spec:
             items:
               - key: nginx.conf
                 path: nginx.conf
+        - name: htpasswd
+          secret:
+            secretName: nginx
+            items:
+              - key: .htpasswd
+                path: .htpasswd
         - name: static-files
           emptyDir: {}

@@ -23,6 +23,7 @@ data:
 
       server{
         listen 80;
+        server_name shinchoku.net www.shinchoku.net;
           
         # Rooting for /public
         location / {
@@ -53,5 +54,51 @@ data:
           proxy_set_header X-Forwarded-SSL $ssl;
           proxy_set_header X-Forwarded-Proto $proto;
         }
+      }
+
+      server{
+        listen 80;
+        server_name beta.shinchoku.net;
+        
+        # beta版はbasic認証を設けている
+        auth_basic           "進捗ノート βテストにご協力いただきありがとうございます！";
+        auth_basic_user_file /etc/nginx/.htpasswd;
+
+        # Rooting for /public
+        location / {
+          root /var/www/static_files;
+          try_files $uri @rails;
+        }
+
+        # Rooting for rails
+        location @rails {
+          proxy_pass http://localhost:3000;
+          proxy_set_header Host $host;
+          proxy_set_header X-Real-IP $remote_addr;
+
+          # 前段NginxのX-Fowardedを継承する
+          set $ssl off;
+          if ($scheme = https) {
+            set $ssl on;
+          }
+          if ($http_x_forwarded_for) {
+            set $ssl $http_x_forwarded_for;
+          }
+          set $proto $scheme;
+          if ($http_x_forwarded_proto) {
+            set $proto $http_x_forwarded_proto;
+          }
+
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-SSL $ssl;
+          proxy_set_header X-Forwarded-Proto $proto;
+        }
+      }
+
+      # リストにないアドレスからのアクセスは444エラーで落とす
+      server {
+        listen       80  default_server;
+        server_name  _;
+        return       444;
       }
     }
