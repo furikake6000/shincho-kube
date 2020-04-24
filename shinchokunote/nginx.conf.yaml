@@ -95,11 +95,20 @@ data:
         }
       }
 
-      # リストにないアドレスからのアクセスは444エラーで落とす
+      # リストにないアドレスからのアクセス
       server {
         listen       80  default_server;
         server_name  _;
-        return       444;
+
+        # health checkだけは許可
+        location = /health {
+          return 200;
+        }
+
+        # 444エラーで落とす
+        location / {
+          return 444;
+        }
       }
     }
   mime.types: |
