@@ -85,7 +85,12 @@ spec:
           - containerPort: 80
         volumeMounts:
           - name: nginx-conf
-            mountPath: /etc/nginx
+            mountPath: /etc/nginx/nginx.conf
+            subPath: nginx.conf  # mount as a file(not directory)
+            readOnly: true
+          - name: mime-types
+            mountPath: /etc/nginx/mime.types
+            subPath: mime.types  # mount as a file(not directory)
             readOnly: true
           - name: htpasswd
             mountPath: /etc/nginx/.htpasswd
