@@ -88,6 +88,10 @@ spec:
             mountPath: /etc/nginx/nginx.conf
             subPath: nginx.conf  # mount as a file(not directory)
             readOnly: true
+          - name: mime-types
+            mountPath: /etc/nginx/mime.types
+            subPath: mime.types  # mount as a file(not directory)
+            readOnly: true
           - name: htpasswd
             mountPath: /etc/nginx/.htpasswd
             subPath: .htpasswd  # mount as a file(not directory)
@@ -108,6 +112,8 @@ spec:
             items:
               - key: nginx.conf
                 path: nginx.conf
+              - key: mime.types
+                path: mime.types
         - name: htpasswd
           secret:
             secretName: nginx
